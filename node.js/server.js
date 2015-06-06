@@ -71,13 +71,17 @@ io.on('connection', function(socket) {
     var timestamp = args[0];
     var md5sum = args[args.length - 1];
 
-    console.log(MSG + util.inspect(args.slice(1, args.length - 1), { colors:true }));
-    console.log("\33[1;30m {timestamp: " + timestamp + ", MD5: " + md5sum + "]\33[0m");
+    console.log(MSG + colorize(args.slice(1, args.length - 1)) +
+    "\t\33[1;30m {timestamp: " + timestamp + ", MD5: " + md5sum + "}\33[0m");
 
     args.unshift("message");
     socket.broadcast.emit.apply(this, args);
   });
 });
+
+function colorize(arr) {
+  return '[ \33[33m' + arr.join('\33[0m, \33[33m') + ' \33[0m]';
+}
 
 http.listen(8080, function(){
   console.log('listening on *:8080');
